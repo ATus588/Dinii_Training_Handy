@@ -1,0 +1,9 @@
+mutation UserLogout {
+  userLogout {
+    data
+    errorCode
+    errorMessage
+    statusCode
+    timestamp
+  }
+}

@@ -1,0 +1,17 @@
+mutation UpdateMenu($updateMenuInput: VUpdateMenuInput!) {
+  updateMenu(updateMenuInput: $updateMenuInput) {
+    statusCode
+    timestamp
+    errorMessage
+    errorCode
+    data {
+      affected
+    }
+  }
+}
+
+mutation CreateMenu($createMenuInput: VCreateMenuInput!) {
+  createMenu(createMenuInput: $createMenuInput) {
+    errorCode
+  }
+}

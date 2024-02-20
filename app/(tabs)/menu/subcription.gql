@@ -1,0 +1,21 @@
+subscription UserMenus {
+  menus(
+    where: { isDisplay: { _eq: true }, isDeleted: { _eq: false } }
+    order_by: { createdAt: desc }
+  ) {
+    id
+    avatar
+    name
+    price
+  }
+}
+
+subscription RestaurantMenus {
+  menus(order_by: { isDisplay: desc }, where: { isDeleted: { _eq: false } }) {
+    id
+    avatar
+    name
+    price
+    isDisplay
+  }
+}

@@ -1,0 +1,9 @@
+mutation CreateOrder($createOrderInput: CreateOrderInput!) {
+  createOrder(createOrderInput: $createOrderInput) {
+    data
+    timestamp
+    statusCode
+    errorMessage
+    errorCode
+  }
+}

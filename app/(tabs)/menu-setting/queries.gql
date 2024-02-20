@@ -1,0 +1,19 @@
+query Menus {
+  menus(order_by: { isDisplay: desc }, where: { isDeleted: { _eq: false } }) {
+    avatar
+    categoryId
+    description
+    id
+    isDeleted
+    isDisplay
+    name
+    price
+  }
+}
+
+query MenuCategories {
+  menuCategories {
+    id
+    name
+  }
+}
