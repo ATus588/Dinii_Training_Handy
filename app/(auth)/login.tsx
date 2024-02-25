@@ -2,6 +2,7 @@ import text from "@/constants/text";
 import { useUserLoginMutation } from "@/gql/schema";
 import React, { useState } from "react";
 import {
+  Image,
   SafeAreaView,
   Text,
   TextInput,
@@ -69,6 +70,11 @@ const Login = (props: Props) => {
           <Text className="text-white font-medium">{text.login}</Text>
         </TouchableOpacity>
       </View>
+      <Image
+        source={require("@/assets/images/dinii-logo.png")}
+        className="absolute bottom-4 right-4 w-[120px] h-[44px]"
+        resizeMode="cover"
+      />
     </SafeAreaView>
   );
 };
