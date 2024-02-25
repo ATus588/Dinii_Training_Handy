@@ -10,8 +10,9 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  SafeAreaView,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useToast } from "react-native-toast-notifications";
 
 type Props = {};
 
@@ -25,7 +26,7 @@ const Menus = (props: Props) => {
   const [orderButtonVisible, setOrderButtonVisible] = useState<boolean>(false);
   const navigation = useNavigation();
   const { data } = useUserMenusSubscription();
-
+  const toast = useToast();
   const [createOrder] = useCreateOrderMutation();
 
   useLayoutEffect(() => {
@@ -110,11 +111,27 @@ const Menus = (props: Props) => {
             menuId: orderItem.menuId,
             quantity: orderItem.quantity,
           })),
+          total: getTotalPrice(),
         },
       },
     });
     if (data?.createOrder.data) {
+      toast.show(text.orderSuccess, {
+        type: "success",
+        placement: "bottom",
+        duration: 3000,
+        // offset: 30,
+        animationType: "slide-in",
+      });
       resetOrderItems();
+    } else {
+      toast.show(text.orderFailed, {
+        type: "error",
+        placement: "bottom",
+        duration: 3000,
+        // offset: 30,
+        animationType: "slide-in",
+      });
     }
   };
 
@@ -130,7 +147,7 @@ const Menus = (props: Props) => {
       <FlatList
         data={data.menus}
         renderItem={({ item }) => (
-          <View className="p-1 mx-2">
+          <View className="mt-3 mx-2">
             <View className="flex-row justify-between items-center">
               <View className="flex-row">
                 <Image
@@ -138,9 +155,11 @@ const Menus = (props: Props) => {
                   resizeMode="cover"
                   source={{ uri: item.avatar }}
                 />
-                <View className="mx-2 ">
-                  <Text className=" max-w-[160px]">{item.name}</Text>
-                  <Text>{item.price}</Text>
+                <View className="mx-2 justify-center">
+                  <Text className=" max-w-[160px] mb-1">{item.name}</Text>
+                  <Text>
+                    {text.yen} {item.price}
+                  </Text>
                 </View>
               </View>
               <View className="flex-row items-center gap-1">
@@ -168,15 +187,15 @@ const Menus = (props: Props) => {
         keyExtractor={(item) => item.id.toString()}
       />
       {orderButtonVisible && (
-        <View className="px-3 bottom-4 fixed">
+        <View className="px-3 bottom-4 fixed items-center">
           <TouchableOpacity
-            className="bg-primary rounded-3xl h-9 w-full justify-center items-center"
+            className="bg-primary rounded-3xl h-9 w-[60%] justify-center items-center"
             onPress={handleOrder}
           >
             <View className="flex w-full flex-row justify-between items-center text-white px-4">
               <Text className="text-white">{text.order}</Text>
               <Text className="text-white font-medium">
-                {getTotalPrice()} {text.yen}
+                {text.yen} {getTotalPrice()}
               </Text>
             </View>
           </TouchableOpacity>

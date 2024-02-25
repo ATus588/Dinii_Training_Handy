@@ -24,6 +24,7 @@ import { setContext } from "@apollo/client/link/context";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { createClient } from "graphql-ws";
+import { ToastProvider } from "react-native-toast-notifications";
 
 const httpLink = createHttpLink({
   uri: process.env.EXPO_PUBLIC_HASURA_API_URL,
@@ -69,7 +70,28 @@ const splitLink = split(
 
 const client = new ApolloClient({
   link: authLink.concat(splitLink),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          menus: {
+            merge(existing, incoming) {
+              return incoming;
+            },
+          },
+        },
+      },
+      Subscription: {
+        fields: {
+          menus: {
+            merge(existing, incoming) {
+              return incoming;
+            },
+          },
+        },
+      },
+    },
+  }),
 });
 
 export {
@@ -108,9 +130,11 @@ export default function RootLayout() {
 
   return (
     <ApolloProvider client={client}>
-      <AuthContextProvider>
-        <RootLayoutNav />
-      </AuthContextProvider>
+      <ToastProvider offset={58}>
+        <AuthContextProvider>
+          <RootLayoutNav />
+        </AuthContextProvider>
+      </ToastProvider>
     </ApolloProvider>
   );
 }

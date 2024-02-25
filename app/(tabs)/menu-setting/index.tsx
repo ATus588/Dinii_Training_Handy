@@ -6,9 +6,19 @@ import {
 } from "@/gql/schema";
 import { Entypo } from "@expo/vector-icons";
 import { useNavigation, useRouter } from "expo-router";
-import React, { useLayoutEffect } from "react";
-import { FlatList, Image, Pressable, Switch, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useLayoutEffect, useState } from "react";
+import {
+  FlatList,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  Switch,
+  Text,
+  View,
+  SafeAreaView,
+  ActivityIndicator,
+} from "react-native";
 
 type Props = {};
 
@@ -17,8 +27,10 @@ const Menus = (props: Props) => {
   const router = useRouter();
   const [updateMenu] = useUpdateMenuMutation();
   const { data } = useMenusQuery();
+  const [loadingId, setLoadingId] = useState<number | null>(null);
+
   const toggleSwitch = async (id: number, isDisplay: boolean) => {
-    await updateMenu({
+    const { data } = await updateMenu({
       variables: {
         updateMenuInput: {
           id,
@@ -26,7 +38,15 @@ const Menus = (props: Props) => {
         },
       },
       refetchQueries: [{ query: MenusDocument }],
+      onCompleted: () => {
+        setLoadingId(null);
+      },
     });
+    // if (data) {
+    //   setTimeout(() => {
+    //     setLoadingId(null);
+    //   }, 500);
+    // }
   };
 
   useLayoutEffect(() => {
@@ -45,43 +65,58 @@ const Menus = (props: Props) => {
   if (!data?.menus) return null;
 
   return (
-    <SafeAreaView className="box-border">
-      <View className="">
-        <View>
-          <Text className="text-lg text-right px-4 mb-2">{text.display}</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <SafeAreaView className="box-border pb-24">
+        <View className="mx-2">
+          <View>
+            <Text className="text-lg text-right px-4 mb-2">{text.display}</Text>
+          </View>
+          <View className="border-[0.5px] mb-3 border-slate-300" />
         </View>
-        <View className="border-[0.5px] mb-3 border-slate-300" />
-      </View>
-      <FlatList
-        data={data.menus}
-        renderItem={({ item }) => (
-          <View className="p-1 mx-2">
-            <View className="flex-row justify-between">
-              <View className="flex-row">
-                <Image
-                  className="h-14 w-14"
-                  resizeMode="cover"
-                  source={{ uri: item.avatar }}
-                />
-                <View className="mx-2">
-                  <Text>{item.name}</Text>
-                  <Text>{item.price}</Text>
+        <FlatList
+          data={data.menus}
+          renderItem={({ item }) => (
+            <View className="mt-3 mx-2">
+              <View className="flex-row justify-between">
+                <View className="flex-row">
+                  <Image
+                    className="h-14 w-14"
+                    resizeMode="cover"
+                    source={{ uri: item.avatar }}
+                  />
+                  <View className="mx-2 justify-center">
+                    <Text className="max-w-[160px]">{item.name}</Text>
+                    <Text>
+                      {text.yen} {item.price}
+                    </Text>
+                  </View>
+                </View>
+                <View className="justify-center">
+                  {loadingId === item.id ? (
+                    <ActivityIndicator />
+                  ) : (
+                    <Switch
+                      trackColor={{ false: "#767577", true: "#81b0ff" }}
+                      thumbColor={item.isDisplay ? "#f5dd4b" : "#f4f3f4"}
+                      ios_backgroundColor="#3e3e3e"
+                      onValueChange={() => {
+                        toggleSwitch(item.id, item.isDisplay);
+                        setLoadingId(item.id);
+                      }}
+                      value={item.isDisplay}
+                    />
+                  )}
                 </View>
               </View>
-              <Switch
-                trackColor={{ false: "#767577", true: "#81b0ff" }}
-                thumbColor={item.isDisplay ? "#f5dd4b" : "#f4f3f4"}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={() => toggleSwitch(item.id, item.isDisplay)}
-                value={item.isDisplay}
-              />
+              <View className="border-[0.5px] border-slate-300 mt-3" />
             </View>
-            <View className="border-[0.5px] border-slate-300 mt-3" />
-          </View>
-        )}
-        keyExtractor={(item) => item.id.toString()}
-      />
-    </SafeAreaView>
+          )}
+          keyExtractor={(item) => item.id.toString()}
+        />
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
