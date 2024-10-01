@@ -1,13 +1,11 @@
-import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link, Tabs } from "expo-router";
-import { Pressable } from "react-native";
+import { Tabs } from "expo-router";
+import React from "react";
 
-import Colors from "@/constants/Colors";
-import { useColorScheme } from "@/components/useColorScheme";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
-import { Feather, MaterialIcons } from "@expo/vector-icons";
+import { useColorScheme } from "@/components/useColorScheme";
 import text from "@/constants/text";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -23,20 +21,27 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#f46f46",
         // tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor: "#f46f46",
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
       }}
+      initialRouteName="table/index"
     >
       <Tabs.Screen
-        name="menu/index"
+        name="table/index"
         options={{
           tabBarIcon: ({ color }) => (
-            <MaterialIcons name="food-bank" size={24} color={color} />
+            <MaterialIcons name="table-restaurant" size={24} color={color} />
           ),
-          title: text.menu,
+          title: text.table,
+        }}
+      />
+      <Tabs.Screen
+        name="table/[id]/menu/index" // Dynamic tab
+        options={{
+          tabBarButton: () => null,  // Hides the tab
         }}
       />
       <Tabs.Screen

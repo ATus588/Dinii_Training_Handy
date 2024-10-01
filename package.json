@@ -20,6 +20,7 @@
     "@react-navigation/native": "^6.0.2",
     "axios": "^1.6.7",
     "core-js": "^3.36.0",
+    "dotenv": "^16.4.5",
     "expo": "~50.0.6",
     "expo-font": "~11.10.2",
     "expo-image-picker": "^14.7.1",

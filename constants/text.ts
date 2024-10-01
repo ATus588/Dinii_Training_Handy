@@ -3,7 +3,8 @@ const text = {
   logout: "ログアウト",
   email: "メール",
   password: "パスワード",
-  menu: "メニュー",
+  table: 'テーブル',
+  menu: "テーブル",
   display: "表示",
   createMenu: "メニューを作成",
   create: "作成",
@@ -33,7 +34,14 @@ const text = {
   paymentSuccess: "会計が完了しました",
   paymentFailed: "会計に失敗しました",
   createMenuSuccess: "メニューが作成されました",
+  openTableSuccess: "テーブルを正常に開きました",
+  openTablePlsChoose: '人数を選択してください',
   uploadAvatar: "アバターをアップロード",
+  amountOfPeople: "名",
+  confirm: '決定',
+  numberOfPeople: '人数',
+  people: '人',
+
 };
 
 export default text;
