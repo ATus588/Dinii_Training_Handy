@@ -1,0 +1,11 @@
+mutation updateTable($status: ETableStatus!, $amountOfPeople: Int!, $tableId: Int!) {
+  updateTable(updateTableInput: {amountOfPeople: $amountOfPeople, status: $status, tableId: $tableId}) {
+    data {
+      affected
+    }
+    errorCode
+    errorMessage
+    statusCode
+    timestamp
+  }
+}

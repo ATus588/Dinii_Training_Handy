@@ -35,7 +35,7 @@ const Login = (props: Props) => {
       if (data?.userLogin?.data?.accessToken) {
         JWTManager.setToken(data.userLogin.data.accessToken);
         setIsAuthenticated(true);
-        router.push("/(tabs)/menu");
+        router.push("/(tabs)/table");
       }
     } catch (e) {
       console.log("e: ", e);

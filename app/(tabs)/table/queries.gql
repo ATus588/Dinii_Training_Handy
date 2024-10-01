@@ -1,0 +1,17 @@
+query getTables {
+  getTables {
+    errorCode
+    errorMessage
+    statusCode
+    timestamp
+    data {
+      amountOfPeople
+      id
+      name
+      openAt
+      restaurantId
+      status
+      total
+    }
+  }
+}
